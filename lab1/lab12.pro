@@ -16,8 +16,9 @@ clauses
 goal
     write("Y "),
     readint(Y),
-    invlor(X1, X2, Y),
+    invlor(Y4, Y5, Y), inv(Y3, Y5), invlor(X3, X4, Y3), invlor(Y1, Y2, Y4), invlor(X2, X3, Y2), invlor(X1, X2, Y1),
     nl,
     write("return "), nl,
-    write(X1), nl, write(X2), nl.
+    write(X1), nl, write(X2), nl,
+    write(X3), nl, write(X4), nl
 	

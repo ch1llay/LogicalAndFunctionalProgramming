@@ -15,7 +15,9 @@ clauses
 
 goal
     write("Y "),
-    readint(Y),
+    readint(Y), nl, write("all variant for ", Y),
     invlor(Y4, Y5, Y), inv(Y3, Y5), invlor(X3, X4, Y3), invlor(Y1, Y2, Y4), invlor(X2, X3, Y2), invlor(X1, X2, Y1),
-    write(X1, " ", X2, " ", X3, " ", X4, " ", Y), nl.
+    nl,
+    readchar(_),
+    write(X1, " ", X2, " ", X3, " ", X4, " ", Y), nl, fail.
 	

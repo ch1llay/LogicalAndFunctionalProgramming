@@ -29,6 +29,5 @@ goal
     invlor(X3, X4, Y3), inv(Y3, Y5), invlor(Y4, Y5, Y),
     write("return "),
 
-    repeat
     write(Y), nl.
 	

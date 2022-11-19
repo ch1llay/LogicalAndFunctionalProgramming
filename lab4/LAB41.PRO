@@ -1,4 +1,4 @@
-trace
+
 domains
     list=integer*
 predicates
@@ -26,8 +26,10 @@ clauses
 
  goal
  	readlist(List, [], Res),
- 	writelist(Res),
- 	insert(List, 3, Res1), nl,
+ 	writelist(Res), nl,
+ 	write("element for insert"), nl,
+ 	readint(El),
+ 	insert(List, El, Res1), nl,
  	write(Res1).
 
  	

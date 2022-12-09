@@ -1,5 +1,5 @@
 trace
- %  Определить число элементов списка, равным следующим за ним
+
 domains
     list=integer*
 predicates
@@ -15,15 +15,16 @@ clauses
    writelist([]).
 
     getpaircount([], 0).
-   getpaircount([Head|[Head|Tail]], Count) :-
-        getpaircount([Head|Tail],  Count1), 
+   getpaircount([Head0|[Head1|Tail]], Count) :-
+        Head0= Head1, 
+        getpaircount([Head1|Tail],  Count1), 
         Count=Count1+1.
-     getpaircount([_|Tail], Count) :-
+     getpaircount(Head, Tail], Count) :-
     getpaircount(Tail, Count).
     
 
  %goal
- %	getpaircount([1, 2, 2, 2, 3, 3, 4], Count), nl,
+ %	getpaircount([1, 2, 2], Count), nl,
  %	write(Count)
 
  	

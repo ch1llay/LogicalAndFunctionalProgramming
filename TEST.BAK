@@ -1,0 +1,10 @@
+predicate
+    plus(integer, integer, integer)
+
+clauses
+    plus(X, Y, Z):-Z=X+Y.
+
+goal
+    write("X "), readline(X),
+    write("Y "), readline(Y),
+    plus(X, Y, Z), write("Z ", Z).

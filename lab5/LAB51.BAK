@@ -1,0 +1,48 @@
+
+domains
+    list=integer*
+predicates
+    readlist(list, list, list)
+    writelist(list)
+    palindrom(list, list, list)
+    palindrom(list, list)
+    palindrom(list)
+    append(list, list, list)
+    
+clauses
+    readlist([H|T], L, Res) :- write("elem"), nl, readint(H), readlist(T, [H|L], Res).
+    readlist([], L, L).
+    writelist([Head|Tail]) :-write(Head, " ") ,writelist(Tail), !.
+   writelist([]).
+
+    append( [], X, X).                             
+    append( [X | Y], Z, [X | W]) :- append( Y, Z, W)
+   
+   
+
+   palindrom([]).
+   palindrom([_]).
+   palindrom(L) :-
+    append([X|T], [X], L),
+    palindrome(T).
+
+
+
+   
+
+
+ goal
+ 	palindrom([1, 2, 3, 3, 2, 1])
+
+
+    % вариант 7
+    % 6 вариант6
+
+    формировани начального дерева
+    передача в целевой предикат поиска элемента
+    вывод дерева write
+
+
+
+
+ 	

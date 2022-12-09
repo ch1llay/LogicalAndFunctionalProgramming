@@ -20,8 +20,8 @@ clauses
     insertEnd([], El, [El]).
     insertEnd([L1|H1],E,[L1|H2]):-insertEnd(H1,E,H2).
     insert([], El, [El]).
-    insert(List, El, Res) :- %insertBegin(List, El, TempRes),
-     insertEnd([El|List], El, Res ).
+    insert(List, El, Res) :- insertBegin(List, El, TempRes),
+     insertEnd(TempRes, El, Res ).
     
 
  goal

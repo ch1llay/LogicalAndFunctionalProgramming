@@ -1,5 +1,5 @@
 make_zero_pal(Xs, Ys) :-
-	findall(Ns, gen_pal(Xs, Ns), Ns1),
+	findall(Ns, get_pal_indexes(Xs, Ns), Ns1),
     append(Ns1, Ns2),
     sort(Ns2, Ns3),
     clear_pos(Xs, 0, Ns3, Ys).
@@ -13,7 +13,7 @@ clear_pos([_ | Xs], N, Ns, [0 | Ys]) :-
     N1 is N + 1,
 	clear_pos(Xs, N1, Ns, Ys).
 
-gen_pal(Xs, Ns) :-
+get_pal_indexes(Xs, Ns) :-
     append(Xs1, Xs2, Xs),
     append(Ps, _, Xs2),
     length(Ps, Len),

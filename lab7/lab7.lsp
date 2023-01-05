@@ -1,0 +1,5 @@
+(defun sum(n k)
+    (if (= n 1) 
+        (* k n) 
+        (+ (* k n) (sum (- n 1) k))))       
+(print (sum 3 2))

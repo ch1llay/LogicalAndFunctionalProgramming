@@ -1,4 +1,4 @@
-(defun REVL (lst)
+(defun task (lst)
  
  (cond
  
@@ -6,7 +6,7 @@
  
   ((null (cdr lst)) lst)
  
-  (t (list (REVL (cdr lst)) (car lst)))))
+  (t (list (task (cdr lst)) (car lst)))))
 
 
 (print(REVL `(A B C)))

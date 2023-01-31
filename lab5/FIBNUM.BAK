@@ -1,0 +1,8 @@
+trace
+predicates 
+   fibnum(integer, integer)
+   
+clauses
+    fibnum(0, 0):-!.
+    fibnum(1, 1).
+    fibnum(X, Y) :- X1 = X - 1, fibnum(X1, Y). 

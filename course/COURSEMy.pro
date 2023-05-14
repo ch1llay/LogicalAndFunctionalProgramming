@@ -4,13 +4,17 @@ domains
 
 predicates
     operator(string, integer)
-    isLiteral(string)
+    isOperand(string)
+    isOpenParenthesis(string)
+    isClouseParenthesis(string)
     isParenthesis(string)
+
     changeParenthesis(string, string)
     push(stack, string, stack)
     pop(stack, string)
     readList(clist)
     reverse(clist, clist, clist)
+    addToList(clist, string, clist)
     len(clist, integer)
     changeParenthesisList(clist, clist)
     prepareList(clist, clist)
@@ -24,19 +28,23 @@ clauses
     operator("*", 2).
     operator("/", 2).
 
-    isLiteral(C):-
+    isOperand(C):-
         not(operator(C, _)),
         C >= "0", C <= "9".
 
-     isLiteral(C):-
+     isOperand(C):-
         not(operator(C, _)),
         C >= "a" , C <= "z".
-    isLiteral(C):-
+    isOperand(C):-
         not(operator(C, _)),
         C >= "A", C <= "Z".   
 
+    isOpenParenthesis(C):-
+        C = "(".
+    isClouseParenthesis(C):-
+        C=")".
     isParenthesis(C):-
-        C = "("; C=")".
+        isOpenParenthesis(C);isClouseParenthesis(C).
     
     push(S, El, [El|S]).
     pop([El|T], El).
@@ -71,11 +79,26 @@ clauses
       	changeParenthesisList(In, Temp),
       	reverse(Temp, Out, []).       
      
-        
+
+    addToList([],El, [El]).
+    addToList([H|T],El, [H|T1]):-addToList(T,El,T1).
+
+
       writeList([H|T]):-write(H),nl, !, writeList(T).
       writeList([]).
 
-    %convert([HIn|Tin], [HS|TS], [HR|TR], Out):-
+    convert([HIn|Tin], Stack, Res, Out):-
+        isOpenParenthesis(HIn),
+        push(Stack, HIn, NewStack), !,
+        convert(Tin, NewStack, Res, Out).
+    
+    convert([HIn|Tin], Stack, Res, Out):-
+        isOperand(HIn),
+        addToList(Res, HIn, NewRes), !,
+        convert(Tin, Stack, NewRes, Out).
 
-
+    convert([HIn|Tin], Stack, Res, Out):-
+        isClouseParenthesis(HIn),
+        addToList(Res, HIn, NewRes), !,
+        convert(Tin, Stack, NewRes, Out).
     

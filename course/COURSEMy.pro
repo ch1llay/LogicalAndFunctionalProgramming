@@ -1,5 +1,6 @@
-nowarnings
 trace
+nowarnings
+
 domains
     clist = string*
 
@@ -24,8 +25,8 @@ predicates
     popStackToOpenParenthesis(clist, clist, clist, clist, clist)
     workWithOperator(clist, string, clist, clist, clist )
     convert_exp(clist, clist, clist, clist)
-    
-
+    convert(clist, clist)
+    main()
 clauses
     operator("+", 1).
     operator("-", 1).
@@ -62,8 +63,10 @@ clauses
     reverse([],Z,Z).
     reverse([H|T],Z,Acc) :- reverse(T,Z,[H|Acc]).
 
-    len([_|T],L):-len(T,TL), L=TL+1.
-	len([],0):-!.
+    len([], 0):-!.
+    len([_Head|Tail], Length):-
+        len(Tail, TailLength),
+        Length = TailLength + 1.
 
     changeParenthesis("(", ")").
     changeParenthesis(")", "(").
@@ -110,31 +113,32 @@ clauses
     
     popStackToOpenParenthesis([], Stack, ResIn, Stack, ResIn).
 
+    workWithOperator([], El, Res, NewStack, NewRes):-
+        push(Stack, El, NewStack),!,
+        NewRes = Res.
+
     workWithOperator(Stack, El, Res, NewStack, NewRes):-
         len(Stack, L), L > 0,
-
         pop(Stack, El, _),
         isOpenParenthesis(El),
-        push(Stack, El, TempNewStack),
+        push(Stack, El, TempNewStack),!,
         workWithOperator(TempNewStack, El, Res, NewRes, NewStack).
     
     workWithOperator(Stack, El, Res, NewStack, NewRes):-
         len(Stack, L), L > 0,
-
         pop(Stack, ElFromStack, TempNewStack),
+
         operator(ElFromStack, PrS),
         operator(El, PrE),
         PrS > PrE,
-        addToList(Res, ElFromStack, TempNewRes),
+        addToList(Res, ElFromStack, TempNewRes),!,
         workWithOperator(TempNewStack, El, TempNewRes, NewStack, NewRes).
 
-    workWithOperator([], El, Res, NewStack, NewRes):-
-        push(Stack, El, NewStack),
-        NewRes = Res, !.
-
-
+   
     workWithOperator(Stack, El, Res, NewStack, NewRes):-
         len(Stack, L), L > 0,
+        push(Stack, El, NewStack),
+        NewRes = Res,
  !.
     
     
@@ -149,22 +153,22 @@ clauses
         convert_exp(Tin, Stack, NewRes, Out).
 
     convert_exp([HIn|Tin], Stack, Res, Out):-
-        isClouseParenthesis(HIn),
+        isClouseParenthesis(HIn),!,
         len(Stack, L), L > 0,
 
         popStackToOpenParenthesis([HIn|TIn], Stack, Res, NewStack, NewRes),
         convert_exp(Tin, NewStack, NewRes, Out).
     
     convert_exp([HIn|Tin], Stack, Res, Out):-
-        operator(HIn,_),
+        operator(HIn,P),
         len(Stack, L), L = 0,
-        push(Stack, HIn, NewStack),
+        push(Stack, HIn, NewStack), !,
         convert_exp(Tin, NewStack, Res, Out).
     
     convert_exp([HIn|Tin], Stack, Res, Out):-
         operator(HIn, _),
         len(Stack, L), L > 0,
-	workWithOperator(Stack, HIn, Res, NewStack, NewRes),
+	    workWithOperator(Stack, HIn, Res, NewStack, NewRes),
         convert_exp(Tin, NewStack, NewRes, Out).
     
     convert_exp([], Stack, Res, Out):-
@@ -173,6 +177,11 @@ clauses
 
     convert_exp(_, _, _, _):-
         write("error, not correct format").
-
     
+    convert(In, Out):-
+    	convert_exp(In, [], [], TempRes),!,
+    	reverse(TempRes, Out, []), !.
     
+    main():-
+    	write("Write prefix expression "), nl, L = ["1", "*", "1", "+", "2", "*", "2"], prepareListForConvert(L, PL),nl, convert(PL, Out), write(Out), writeList(Out).
+    	

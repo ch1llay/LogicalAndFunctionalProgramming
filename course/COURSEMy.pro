@@ -1,4 +1,4 @@
-trace
+%trace
 nowarnings
 
 domains
@@ -183,4 +183,4 @@ clauses
     
     main():-
     	%write("Write prefix expression "), nl, readList(L), prepareListForConvert(L, PL),nl, convert(PL, Out), writeList(Out).
-        write("Write prefix expression "), nl, L = ["1", "*", "(", "1", "+", "1", ")", "*", "2"], prepareListForConvert(L, PL),nl, convert(PL, Out), writeList(Out).
+        write("Write prefix expression "), nl,L=["1","/","1","*","3","+","(","1","+","1","*","5",")","/","1"], prepareListForConvert(L, PL),nl, convert(PL, Out), writeList(Out).

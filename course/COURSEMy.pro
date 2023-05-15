@@ -22,7 +22,7 @@ predicates
     prepareListForConvert(clist, clist)
     insertList(clist, clist, clist)
     writeList(clist)
-    popStackToOpenParenthesis(clist, clist, clist, clist, clist)
+    popStackToOpenParenthesis(clist, clist, clist, clist)
     workWithOperator(clist, string, clist, clist, clist )
     convert_exp(clist, clist, clist, clist)
     convert(clist, clist)
@@ -98,21 +98,21 @@ clauses
       writeList([H|T]):-write(H),nl, !, writeList(T).
       writeList([]).
 
-    popStackToOpenParenthesis([HIn|TIn], Stack, ResIn, OUTStack, OUTRes):-
-        not(isOpenParenthesis(HIn)), !,
+    popStackToOpenParenthesis(Stack, ResIn, OUTStack, OUTRes):-
         pop(Stack, El, NewStack),
+        not(isOpenParenthesis(El)), !,
         addToList(ResIn, El, Res),
-        popStackToOpenParenthesis(Tin, NewStack, Res, OUTStack, OUTRes).
+        popStackToOpenParenthesis(NewStack, Res, OUTStack, OUTRes).
     
-    popStackToOpenParenthesis([HIn|_], Stack, ResIn, OUTStack, OUTRes):-
-        isOpenParenthesis(HIn), !,
-        pop(Stack, _, NewStack),
-        popStackToOpenParenthesis([], NewStack, ResIn, OUTStack, OUTRes).
+    popStackToOpenParenthesis(Stack, ResIn, OUTStack, OUTRes):-
+        pop(Stack, El, NewStack),
+        isOpenParenthesis(El), !,
+        OUTStack = NewStack,
+        OUTRes = ResIn.
+        
 
-    popStackToOpenParenthesis(_, _, _, _, _) :- write("error format").
+    popStackToOpenParenthesis(_, _, _, _) :- write("error format").
     
-    popStackToOpenParenthesis([], Stack, ResIn, Stack, ResIn).
-
     workWithOperator([], El, Res, NewStack, NewRes):-
         push(Stack, El, NewStack),!,
         NewRes = Res.
@@ -155,8 +155,7 @@ clauses
     convert_exp([HIn|Tin], Stack, Res, Out):-
         isClouseParenthesis(HIn),!,
         len(Stack, L), L > 0,
-
-        popStackToOpenParenthesis([HIn|TIn], Stack, Res, NewStack, NewRes),
+        popStackToOpenParenthesis(Stack, Res, NewStack, NewRes),
         convert_exp(Tin, NewStack, NewRes, Out).
     
     convert_exp([HIn|Tin], Stack, Res, Out):-
@@ -183,5 +182,5 @@ clauses
     	reverse(TempRes, Out, []), !.
     
     main():-
-    	write("Write prefix expression "), nl, L = ["1", "*", "1", "+", "2", "*", "2"], prepareListForConvert(L, PL),nl, convert(PL, Out), write(Out), writeList(Out).
-    	
+    	%write("Write prefix expression "), nl, readList(L), prepareListForConvert(L, PL),nl, convert(PL, Out), writeList(Out).
+        write("Write prefix expression "), nl, L = ["1", "*", "(", "1", "+", "1", ")", "*", "2"], prepareListForConvert(L, PL),nl, convert(PL, Out), writeList(Out).

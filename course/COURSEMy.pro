@@ -1,3 +1,4 @@
+nowarnings
 trace
 domains
     clist = string*
@@ -22,7 +23,7 @@ predicates
     writeList(clist)
     popStackToOpenParenthesis(clist, clist, clist, clist, clist)
     workWithOperator(clist, string, clist, clist, clist )
-    convert(clist, clist, clist, clist)
+    convert_exp(clist, clist, clist, clist)
     
 
 clauses
@@ -137,40 +138,40 @@ clauses
  !.
     
     
-    convert([HIn|Tin], Stack, Res, Out):-
+    convert_exp([HIn|Tin], Stack, Res, Out):-
         isOpenParenthesis(HIn),
         push(Stack, HIn, NewStack), !,
-        convert(Tin, NewStack, Res, Out).
+        convert_exp(Tin, NewStack, Res, Out).
     
-    convert([HIn|Tin], Stack, Res, Out):-
+    convert_exp([HIn|Tin], Stack, Res, Out):-
         isOperand(HIn),
         addToList(Res, HIn, NewRes), !,
-        convert(Tin, Stack, NewRes, Out).
+        convert_exp(Tin, Stack, NewRes, Out).
 
-    convert([HIn|Tin], Stack, Res, Out):-
+    convert_exp([HIn|Tin], Stack, Res, Out):-
         isClouseParenthesis(HIn),
         len(Stack, L), L > 0,
 
         popStackToOpenParenthesis([HIn|TIn], Stack, Res, NewStack, NewRes),
-        convert(Tin, NewStack, NewRes, Out).
+        convert_exp(Tin, NewStack, NewRes, Out).
     
-    convert([HIn|Tin], Stack, Res, Out):-
-        isOperand(HIn),
+    convert_exp([HIn|Tin], Stack, Res, Out):-
+        operator(HIn,_),
         len(Stack, L), L = 0,
         push(Stack, HIn, NewStack),
-        convert(Tin, NewStack, Res, Out).
+        convert_exp(Tin, NewStack, Res, Out).
     
-    convert([HIn|Tin], Stack, Res, Out):-
-        isOperand(HIn),
+    convert_exp([HIn|Tin], Stack, Res, Out):-
+        operator(HIn, _),
         len(Stack, L), L > 0,
-
-        convert(Tin, NewStack, Res, Out).
+	workWithOperator(Stack, HIn, Res, NewStack, NewRes),
+        convert_exp(Tin, NewStack, NewRes, Out).
     
-    convert([], Stack, Res, Out):-
-        insertList(Stack, Res, TempRes), !,
-        reverse(Temp, Out, []).
+    convert_exp([], Stack, Res, Out):-
+        insertList(Stack, Res, Out), !.
+        %reverse(Temp, Out, []).
 
-    convert(_, _, _, _):-
+    convert_exp(_, _, _, _):-
         write("error, not correct format").
 
     
